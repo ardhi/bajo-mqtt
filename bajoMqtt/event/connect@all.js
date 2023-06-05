@@ -1,7 +1,7 @@
 module.exports = async function (conn) {
   const { _, getConfig } = this.bajo.helper
   const config = getConfig('bajoMqtt')
-  this.bajo.log.debug(`[MQTT][${conn.name}] connected`)
+  this.bajo.log.info(`[%s][%s] connected`, 'ndutMqtt', conn.name)
   const client = this.bajoMqtt.client[conn.name]
   // relay
   const relays = _.filter(config.relays || [], r => _.get(r, 'source.connection') === conn.name)
@@ -14,7 +14,7 @@ module.exports = async function (conn) {
     const subs = _.filter(this.bajoMqtt.subscribe[t] || [], { connection: conn.name })
     if (subs.length > 0) {
       client.subscribe(t)
-      this.bajo.log.debug(`[MQTT][${conn.name}] subscribed to ${t}`)
+      this.bajo.log.info(`[%s][%s] subscribed to %s`, 'ndutMqtt', conn.name, t)
     }
   }
 }

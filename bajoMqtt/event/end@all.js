@@ -1,3 +1,3 @@
 module.exports = async function (conn) {
-  this.bajo.log.debug(`[MQTT][${conn.name}] ended`)
+  this.bajo.log.debug(`[%s][%s] ended`, 'ndutMqtt', conn.name)
 }
