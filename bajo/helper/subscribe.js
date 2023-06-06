@@ -13,7 +13,7 @@ module.exports = function (topic, handler, conn = 'default', now, publish) {
     this.bajoMqtt.subscribe[o.topic].push(o)
     if (now) {
       this.bajoMqtt.instance[c].subscribe(o)
-      this.bajo.log.info(`[%s][%s] subscribed to %s`, 'ndutMqtt', conn.name, o.topic)
+      this.bajo.log.info(`[%s][%s] subscribed to %s`, 'bajoMqtt', conn.name, o.topic)
     }
   }
 }

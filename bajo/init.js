@@ -1,8 +1,5 @@
 const path = require('path')
 
-const mqttEvents = ['connect', 'reconnect', 'close', 'disconnect', 'offline', 'error', 'end',
-  'message', 'packetsend', 'packetreceive']
-
 async function prep () {
   const { _, getConfig, error } = this.bajo.helper
   const config = getConfig('bajoMqtt')
@@ -15,6 +12,7 @@ async function prep () {
       else c.name = 'default'
     }
     c.options = c.options || {}
+    if (!c.options.clientId) c.options.clientId = this.bajoExtra.helper.generateId()
   }
   const names = _.map(config.connections, 'name')
   const uniqNames = _.uniq(names)
@@ -23,6 +21,7 @@ async function prep () {
 
 async function build () {
   const { _, fastGlob, getConfig, walkBajos, error } = this.bajo.helper
+  const { events } = this.bajoMqtt.helper
   const config = getConfig('bajoMqtt')
 
   this.bajoMqtt.event = {}
@@ -31,7 +30,7 @@ async function build () {
     const files = await fastGlob(`${cfg.dir}/bajoMqtt/event/*.js`)
     for (const f of files) {
       let [base, conn] = path.basename(f, '.js').split('@')
-      if (!mqttEvents.includes(base)) continue
+      if (!events.includes(base)) continue
       if (!conn) conn = 'default'
       let mod = require(f)
       if (_.isFunction(mod)) mod = { handler: mod }
