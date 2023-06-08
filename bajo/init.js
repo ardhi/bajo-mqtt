@@ -25,8 +25,7 @@ async function build () {
   const config = getConfig('bajoMqtt')
 
   this.bajoMqtt.event = {}
-  await walkBajos(async function (n) {
-    const cfg = getConfig(n)
+  await walkBajos(async function ({ cfg }) {
     const files = await fastGlob(`${cfg.dir}/bajoMqtt/event/*.js`)
     for (const f of files) {
       let [base, conn] = path.basename(f, '.js').split('@')
@@ -45,8 +44,7 @@ async function build () {
   })
 
   this.bajoMqtt.subscribe = {}
-  await walkBajos(async function (n) {
-    const cfg = getConfig(n)
+  await walkBajos(async function ({ cfg }) {
     const files = await fastGlob(`${cfg.dir}/bajoMqtt/subscribe/*.js`)
     // TODO: topic with special chars
     for (const f of files) {
@@ -60,8 +58,8 @@ async function build () {
       if (_.isPlainObject(mod)) {
         if (!mod.topic) mod.topic = base
         if (!mod.connection) mod.connection = conn
-        else if (_.isFunction(mod.topic)) mod.topic = await mod.topic.call(this)
-        subs.push(mod)
+        if (_.isFunction(mod.topic)) mod.topic = await mod.topic.call(this)
+        if (mod.topic && mod.connection && mod.handler) subs.push(mod)
       } else if (_.isArray(mod)) subs = mod
       for (const s of subs) {
         this.bajoMqtt.helper.subscribe(s)
