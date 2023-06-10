@@ -71,7 +71,7 @@ async function build () {
   this.addHook('onClose', async (scp, done) => {
     Promise.all(_.map(_.keys(client), i => {
       return new Promise((resolve, reject) => {
-        this.bajo.log.debug(`Closing MQTT connection '${i}'`)
+        log.debug(`Closing MQTT connection '${i}'`)
         client[i].end(true) // do we have to wait?
         resolve()
       })

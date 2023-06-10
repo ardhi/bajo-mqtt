@@ -1,3 +1,4 @@
 module.exports = async function (conn) {
-  this.bajo.log.info(`[%s][%s] disconnected`, 'bajoMqtt', conn.name)
+  const { log } = this.bajo.helper
+  log.info(`Connection '%s' disconnected`, conn.name)
 }
