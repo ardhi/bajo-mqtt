@@ -1,4 +1,4 @@
-const path = require('path')
+import path from 'path'
 
 async function prep () {
   const { _, getConfig, error } = this.bajo.helper
@@ -20,7 +20,7 @@ async function prep () {
 }
 
 async function build () {
-  const { _, fastGlob, getConfig, walkBajos, error } = this.bajo.helper
+  const { _, fastGlob, getConfig, walkBajos, error, importModule } = this.bajo.helper
   const { events } = this.bajoMqtt.helper
   const config = getConfig('bajoMqtt')
 
@@ -31,7 +31,7 @@ async function build () {
       let [base, conn] = path.basename(f, '.js').split('@')
       if (!events.includes(base)) continue
       if (!conn) conn = 'default'
-      let mod = require(f)
+      let mod = await importModule(f)
       if (_.isFunction(mod)) mod = { handler: mod }
       if (!mod.handler) throw error('No handler provided', { code: 'BAJOMQTT_NO_HANDLER_PROVIDED' })
       if (!this.bajoMqtt.event[base]) this.bajoMqtt.event[base] = []
@@ -52,7 +52,7 @@ async function build () {
       base = base.replace(/\-/g, '/') // base = topic
       if (!conn) conn = ['default']
       else conn = conn.split(',')
-      let mod = require(f)
+      let mod = await importModule(f)
       let subs = []
       if (_.isFunction(mod)) mod = mod.length === 0 ? await mod.call(this) : { handler: mod }
       if (_.isPlainObject(mod)) {
@@ -71,7 +71,7 @@ async function build () {
   this.addHook('onClose', async (scp, done) => {
     Promise.all(_.map(_.keys(client), i => {
       return new Promise((resolve, reject) => {
-        log.debug(`Closing MQTT connection '${i}'`)
+        this.bajo.log.debug(`Closing MQTT connection '${i}'`)
         client[i].end(true) // do we have to wait?
         resolve()
       })
@@ -82,7 +82,7 @@ async function build () {
   */
 }
 
-module.exports = async function () {
+export default async function () {
   await prep.call(this)
   await build.call(this)
 }

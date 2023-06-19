@@ -1,4 +1,4 @@
-module.exports = async function (conn) {
+export default async function (conn) {
   const { log } = this.bajo.helper
   log.debug(`Connection '%s' offline`, conn.name)
 }

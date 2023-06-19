@@ -30,7 +30,7 @@ const handleRelay = async function(s, conn, ...args) {
   }
 }
 
-module.exports = async function (conn, ...args) {
+export default async function (conn, ...args) {
   const { _ } = this.bajo.helper
   const [topic] = args
   const subs = _.filter(this.bajoMqtt.subscribe[topic] || [], s => {

@@ -1,4 +1,4 @@
-module.exports = async function (conn) {
+export default async function (conn) {
   const { _, log, getConfig } = this.bajo.helper
   const config = getConfig('bajoMqtt')
   log.info(`Connected to '%s'`, conn.name)

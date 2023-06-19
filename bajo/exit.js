@@ -1,4 +1,4 @@
-module.exports = function () {
+export default function () {
   const { _ } = this.bajo.helper
   const { async } = this.bajoExtra.helper
   const names = _.keys(this.bajoMqtt.client)

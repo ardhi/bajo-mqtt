@@ -1,4 +1,4 @@
-module.exports = async function () {
+export default async function () {
   const { _, getConfig } = this.bajo.helper
   const { mqtt, events } = this.bajoMqtt.helper
   const config = getConfig('bajoMqtt')

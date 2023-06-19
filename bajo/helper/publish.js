@@ -1,4 +1,4 @@
-module.exports = function (topic, message, conn = 'default') {
+export default function (topic, message, conn = 'default') {
   const { _, error } = this.bajo.helper
   return new Promise((resolve, reject) => {
     const client = this.bajoMqtt.client[conn]

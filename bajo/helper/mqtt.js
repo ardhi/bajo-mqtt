@@ -1,1 +1,2 @@
-module.exports = require('mqtt')
+import mqtt from 'mqtt'
+export default mqtt
