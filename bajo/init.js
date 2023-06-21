@@ -19,70 +19,51 @@ async function prep () {
   if (names.length !== uniqNames.length) throw error(`One or more connections shared the same names`, { code: 'BAJOMQTT_CONNECTION_NAME_CLASH' })
 }
 
-async function build () {
-  const { _, fastGlob, getConfig, walkBajos, error, importModule } = this.bajo.helper
+async function getEvents ({ file }) {
+  const { _, error, importModule, getConfig } = this.bajo.helper
   const { events } = this.bajoMqtt.helper
   const config = getConfig('bajoMqtt')
+  this.bajoMqtt.event = this.bajoMqtt.event || {}
 
-  this.bajoMqtt.event = {}
-  await walkBajos(async function ({ cfg }) {
-    const files = await fastGlob(`${cfg.dir}/bajoMqtt/event/*.js`)
-    for (const f of files) {
-      let [base, conn] = path.basename(f, '.js').split('@')
-      if (!events.includes(base)) continue
-      if (!conn) conn = 'default'
-      let mod = await importModule(f)
-      if (_.isFunction(mod)) mod = { handler: mod }
-      if (!mod.handler) throw error('No handler provided', { code: 'BAJOMQTT_NO_HANDLER_PROVIDED' })
-      if (!this.bajoMqtt.event[base]) this.bajoMqtt.event[base] = []
-      if (conn === 'all') conn = _.map(config.connections, 'name')
-      else conn = conn.split(',')
-      for (const c of conn) {
-        this.bajoMqtt.event[base].push(_.merge({}, mod, { connection: c }))
-      }
-    }
-  })
+  let [base, conn] = path.basename(file, '.js').split('@')
+  if (!events.includes(base)) return undefined
+  if (!conn) conn = 'default'
+  let mod = await importModule(file)
+  if (_.isFunction(mod)) mod = { handler: mod }
+  if (!mod.handler) throw error('No handler provided', { code: 'BAJOMQTT_NO_HANDLER_PROVIDED' })
+  if (!this.bajoMqtt.event[base]) this.bajoMqtt.event[base] = []
+  if (conn === 'all') conn = _.map(config.connections, 'name')
+  else conn = conn.split(',')
+  for (const c of conn) {
+    this.bajoMqtt.event[base].push(_.merge({}, mod, { connection: c }))
+  }
+}
 
-  this.bajoMqtt.subscribe = {}
-  await walkBajos(async function ({ cfg }) {
-    const files = await fastGlob(`${cfg.dir}/bajoMqtt/subscribe/*.js`)
-    // TODO: topic with special chars
-    for (const f of files) {
-      let [base, conn] = path.basename(f, '.js').split('@')
-      base = base.replace(/\-/g, '/') // base = topic
-      if (!conn) conn = ['default']
-      else conn = conn.split(',')
-      let mod = await importModule(f)
-      let subs = []
-      if (_.isFunction(mod)) mod = mod.length === 0 ? await mod.call(this) : { handler: mod }
-      if (_.isPlainObject(mod)) {
-        if (!mod.topic) mod.topic = base
-        if (!mod.connection) mod.connection = conn
-        if (_.isFunction(mod.topic)) mod.topic = await mod.topic.call(this)
-        if (mod.topic && mod.connection && mod.handler) subs.push(mod)
-      } else if (_.isArray(mod)) subs = mod
-      for (const s of subs) {
-        this.bajoMqtt.helper.subscribe(s)
-      }
-    }
-  })
+async function getSubscribers ({ file }) {
+  const { _, importModule } = this.bajo.helper
+  this.bajoMqtt.subscriber = this.bajoMqtt.subscriber || {}
 
-  /*
-  this.addHook('onClose', async (scp, done) => {
-    Promise.all(_.map(_.keys(client), i => {
-      return new Promise((resolve, reject) => {
-        this.bajo.log.debug(`Closing MQTT connection '${i}'`)
-        client[i].end(true) // do we have to wait?
-        resolve()
-      })
-    })).then(() => {
-      done()
-    })
-  })
-  */
+  let [base, conn] = path.basename(file, '.js').split('@')
+  base = base.replace(/\-/g, '/') // base = topic
+  if (!conn) conn = ['default']
+  else conn = conn.split(',')
+  let mod = await importModule(file)
+  let subs = []
+  if (_.isFunction(mod)) mod = mod.length === 0 ? await mod.call(this) : { handler: mod }
+  if (_.isPlainObject(mod)) {
+    if (!mod.topic) mod.topic = base
+    if (!mod.connection) mod.connection = conn
+    if (_.isFunction(mod.topic)) mod.topic = await mod.topic.call(this)
+    if (mod.topic && mod.connection && mod.handler) subs.push(mod)
+  } else if (_.isArray(mod)) subs = mod
+  for (const s of subs) {
+    this.bajoMqtt.helper.subscribe(s)
+  }
 }
 
 export default async function () {
+  const { walkBajos } = this.bajo.helper
   await prep.call(this)
-  await build.call(this)
+  await walkBajos(getEvents, { glob: 'event/*.js' })
+  await walkBajos(getSubscribers, { glob: 'subscriber/*.js' })
 }
