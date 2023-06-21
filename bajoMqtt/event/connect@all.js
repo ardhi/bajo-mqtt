@@ -10,8 +10,8 @@ export default async function (conn) {
     this.bajoMqtt.helper.subscribe(opts)
   }
   // normal subscriber
-  for (const t in this.bajoMqtt.subscribe) {
-    const subs = _.filter(this.bajoMqtt.subscribe[t] || [], { connection: conn.name })
+  for (const t in this.bajoMqtt.subscriber) {
+    const subs = _.filter(this.bajoMqtt.subscriber[t] || [], { connection: conn.name })
     if (subs.length > 0) {
       client.subscribe(t)
       log.info(`Subscribed to '%s:%s'`, conn.name, t)

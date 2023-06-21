@@ -33,7 +33,7 @@ const handleRelay = async function(s, conn, ...args) {
 export default async function (conn, ...args) {
   const { _ } = this.bajo.helper
   const [topic] = args
-  const subs = _.filter(this.bajoMqtt.subscribe[topic] || [], s => {
+  const subs = _.filter(this.bajoMqtt.subscriber[topic] || [], s => {
     return ['all', conn.name].includes(s.connection)
   })
   if (subs.length === 0) return
