@@ -13,7 +13,7 @@ export default function (topic, handler, conn = 'default', now, publish) {
     this.bajoMqtt.subscriber[o.topic].push(o)
     if (now) {
       this.bajoMqtt.instance[c].subscribe(o)
-      this.bajo.log.info(`[%s][%s] subscribed to %s`, 'bajoMqtt', conn.name, o.topic)
+      this.bajo.log.info(`Subscribed to '%s:%s'`, conn.name, o.topic)
     }
   }
 }

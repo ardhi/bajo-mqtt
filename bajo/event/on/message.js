@@ -30,15 +30,18 @@ const handleRelay = async function(s, conn, ...args) {
   }
 }
 
-export default async function (conn, ...args) {
-  const { _ } = this.bajo.helper
-  const [topic] = args
-  const subs = _.filter(this.bajoMqtt.subscriber[topic] || [], s => {
-    return ['all', conn.name].includes(s.connection)
-  })
-  if (subs.length === 0) return
-  for (const s of subs) {
-    if (s.relay) await handleRelay.call(this, s, conn, ...args)
-    else await handleSub.call(this, s, conn, ...args)
-  }
+export default {
+  handler: async function (conn, ...args) {
+    const { _ } = this.bajo.helper
+    const [topic] = args
+    const subs = _.filter(this.bajoMqtt.subscriber[topic] || [], s => {
+      return ['all', conn.name].includes(s.connection)
+    })
+    if (subs.length === 0) return
+    for (const s of subs) {
+      if (s.relay) await handleRelay.call(this, s, conn, ...args)
+      else await handleSub.call(this, s, conn, ...args)
+    }
+  },
+  level: 1
 }

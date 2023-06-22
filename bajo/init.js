@@ -19,26 +19,6 @@ async function prep () {
   if (names.length !== uniqNames.length) throw error(`One or more connections shared the same names`, { code: 'BAJOMQTT_CONNECTION_NAME_CLASH' })
 }
 
-async function getEvents ({ file }) {
-  const { _, error, importModule, getConfig } = this.bajo.helper
-  const { events } = this.bajoMqtt.helper
-  const config = getConfig('bajoMqtt')
-  this.bajoMqtt.event = this.bajoMqtt.event || {}
-
-  let [base, conn] = path.basename(file, '.js').split('@')
-  if (!events.includes(base)) return undefined
-  if (!conn) conn = 'default'
-  let mod = await importModule(file)
-  if (_.isFunction(mod)) mod = { handler: mod }
-  if (!mod.handler) throw error('No handler provided', { code: 'BAJOMQTT_NO_HANDLER_PROVIDED' })
-  if (!this.bajoMqtt.event[base]) this.bajoMqtt.event[base] = []
-  if (conn === 'all') conn = _.map(config.connections, 'name')
-  else conn = conn.split(',')
-  for (const c of conn) {
-    this.bajoMqtt.event[base].push(_.merge({}, mod, { connection: c }))
-  }
-}
-
 async function getSubscribers ({ file }) {
   const { _, importModule } = this.bajo.helper
   this.bajoMqtt.subscriber = this.bajoMqtt.subscriber || {}
@@ -64,6 +44,5 @@ async function getSubscribers ({ file }) {
 export default async function () {
   const { walkBajos } = this.bajo.helper
   await prep.call(this)
-  await walkBajos(getEvents, { glob: 'event/*.js' })
   await walkBajos(getSubscribers, { glob: 'subscriber/*.js' })
 }
