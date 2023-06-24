@@ -21,7 +21,6 @@ async function prep () {
 
 async function getSubscribers ({ file }) {
   const { _, importModule } = this.bajo.helper
-  this.bajoMqtt.subscriber = this.bajoMqtt.subscriber || {}
 
   let [base, conn] = path.basename(file, '.js').split('@')
   base = base.replace(/\-/g, '/') // base = topic
