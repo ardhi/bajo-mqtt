@@ -9,7 +9,7 @@ export default function (topic, handler, conn = 'default', now, publish) {
     o.connection = c
     this.bajoMqtt.subscribers.push(o)
     if (now) {
-      const instance = _.find(this.bajoMqtt.clients, { name: c.name })
+      const instance = _.find(this.bajoMqtt.instances, { name: c.name })
       if (instance) {
         instance.client.subscribe(o)
         log.info(`Subscribed to '%s:%s'`, conn.name, o.topic)

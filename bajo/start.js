@@ -1,4 +1,4 @@
-export default async function () {
+async function start () {
   const { _, getConfig, emit } = this.bajo.helper
   const { mqtt, events } = this.bajoMqtt.helper
   const config = getConfig('bajoMqtt')
@@ -15,3 +15,5 @@ export default async function () {
   }
   this.bajoMqtt.instances = instances
 }
+
+export default start

@@ -1,7 +1,6 @@
 const message = {
-  handler: async function (conn, ...args) {
+  handler: async function (conn, topic, ...args) {
     const { _ } = this.bajo.helper
-    const [topic] = args
     const subs = _.filter(this.bajoMqtt.subscribers, s => s.connection === conn.name && s.topic === topic)
     if (subs.length === 0) return
     for (const s of subs) {

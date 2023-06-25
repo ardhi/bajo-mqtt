@@ -1,47 +1,37 @@
-import path from 'path'
+import collectSubscribers from '../lib/collect-subscribers.js'
 
-async function prep () {
+async function connBuilder (c, config) {
+  const { _, error } = this.bajo.helper
+  if (_.isString(c)) c = { url: c }
+  if (!_.has(c, 'url')) throw error('Connection must have url', { code: 'BAJOMQTT_CONNECTION_MISSING_MISSING' })
+  if (!_.has(c, 'name')) {
+    if (_.find(config.connections, { name: 'default' })) throw error('Connection \'default\' already exists', { code: 'BAJOMQTT_CONNECTION_ALREADY_EXISTS' })
+    else c.name = 'default'
+  }
+  c.options = c.options || {}
+  if (!c.options.clientId) c.options.clientId = this.bajoExtra.helper.generateId()
+}
+
+function prepBroadcasts () {
   const { _, getConfig, error } = this.bajo.helper
-  const config = getConfig('bajoMqtt')
-  if (!config.connections) return
-  if (!_.isArray(config.connections)) config.connections = [config.connections]
-  for (let c of config.connections) {
-    if (_.isString(c)) c = { url: c }
-    if (!_.has(c, 'name')) {
-      if (_.find(config.connections, { name: 'default' })) throw error('Connection \'default\' already exists', { code: 'BAJOMQTT_CONNECTION_ALREADY_EXISTS' })
-      else c.name = 'default'
-    }
-    c.options = c.options || {}
-    if (!c.options.clientId) c.options.clientId = this.bajoExtra.helper.generateId()
-  }
-  const names = _.map(config.connections, 'name')
-  const uniqNames = _.uniq(names)
-  if (names.length !== uniqNames.length) throw error(`One or more connections shared the same names`, { code: 'BAJOMQTT_CONNECTION_NAME_CLASH' })
-}
-
-async function getSubscribers ({ file }) {
-  const { _, importModule } = this.bajo.helper
-
-  let [base, conn] = path.basename(file, '.js').split('@')
-  base = base.replace(/\-/g, '/') // base = topic
-  if (!conn) conn = ['default']
-  else conn = conn.split(',')
-  let mod = await importModule(file)
-  let subs = []
-  if (_.isFunction(mod)) mod = mod.length === 0 ? await mod.call(this) : { handler: mod }
-  if (_.isPlainObject(mod)) {
-    if (!mod.topic) mod.topic = base
-    if (!mod.connection) mod.connection = conn
-    if (_.isFunction(mod.topic)) mod.topic = await mod.topic.call(this)
-    if (mod.topic && mod.connection && mod.handler) subs.push(mod)
-  } else if (_.isArray(mod)) subs = mod
-  for (const s of subs) {
-    this.bajoMqtt.helper.subscribe(s)
+  const opts = getConfig('bajoMqtt')
+  let bcs = opts.broadcasts || []
+  if (_.isPlainObject(bcs)) bcs = [bcs]
+  for (const b of bcs) {
+    if (!b.name) throw error('A broadcaster must have a name', { code: 'BAJOMQTT_BROADCASTER_NAME_MISSING' })
+    if (!b.connection) throw error('A broadcaster must be bound to a connection', { code: 'BAJOMQTT_BROADCASTER_CONNECTION_MISSING' })
+    if (!_.map(opts.connections, 'name').includes(b.connection)) throw error(`Unknown connection for broadcaster '${b.name}'`, { code: 'BAJOMQTT_BROADCASTER_CONNECTION_UNKNOWN' })
+    if (!b.topic) throw error('A broadcaster must have topic to send to', { code: 'BAJOMQTT_BROADCASTER_TOPIC_MISSING' })
+    if (!b.tags) throw error('A broadcaster must have one or more tags', { code: 'BAJOMQTT_BROADCASTER_TAG_MISSING' })
+    if (_.isString(b.tags)) b.tags = [b.tags]
   }
 }
 
-export default async function () {
-  const { walkBajos } = this.bajo.helper
-  await prep.call(this)
-  await walkBajos(getSubscribers, { glob: 'subscriber/*.js' })
+async function init () {
+  const { walkBajos, buildConnections } = this.bajo.helper
+  await buildConnections('bajoMqtt', connBuilder, ['name'])
+  prepBroadcasts.call(this)
+  await walkBajos(collectSubscribers, { glob: 'subscriber/*.js' })
 }
+
+export default init
