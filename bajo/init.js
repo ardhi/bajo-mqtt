@@ -1,7 +1,7 @@
 import collectSubscribers from '../lib/collect-subscribers.js'
 
 async function connBuilder (c, config) {
-  const { _, error } = this.bajo.helper
+  const { _, error, generateId } = this.bajo.helper
   if (_.isString(c)) c = { url: c }
   if (!_.has(c, 'url')) throw error('Connection must have url', { code: 'BAJOMQTT_CONNECTION_MISSING_MISSING' })
   if (!_.has(c, 'name')) {
@@ -9,28 +9,26 @@ async function connBuilder (c, config) {
     else c.name = 'default'
   }
   c.options = c.options || {}
-  if (!c.options.clientId) c.options.clientId = this.bajoExtra.helper.generateId()
+  if (!c.options.clientId) c.options.clientId = generateId()
 }
 
-function prepBroadcasts () {
+function prepBroadcastPool () {
   const { _, getConfig, error } = this.bajo.helper
   const opts = getConfig('bajoMqtt')
-  let bcs = opts.broadcasts || []
+  let bcs = opts.broadcastPools || []
   if (_.isPlainObject(bcs)) bcs = [bcs]
   for (const b of bcs) {
-    if (!b.name) throw error('A broadcaster must have a name', { code: 'BAJOMQTT_BROADCASTER_NAME_MISSING' })
-    if (!b.connection) throw error('A broadcaster must be bound to a connection', { code: 'BAJOMQTT_BROADCASTER_CONNECTION_MISSING' })
-    if (!_.map(opts.connections, 'name').includes(b.connection)) throw error(`Unknown connection for broadcaster '${b.name}'`, { code: 'BAJOMQTT_BROADCASTER_CONNECTION_UNKNOWN' })
-    if (!b.topic) throw error('A broadcaster must have topic to send to', { code: 'BAJOMQTT_BROADCASTER_TOPIC_MISSING' })
-    if (!b.tags) throw error('A broadcaster must have one or more tags', { code: 'BAJOMQTT_BROADCASTER_TAG_MISSING' })
-    if (_.isString(b.tags)) b.tags = [b.tags]
+    if (!b.name) throw error('A pool must have a name', { code: 'BAJOMQTT_POOL_NAME_MISSING' })
+    if (!b.connection) throw error('A pool must be bound to a connection', { code: 'BAJOMQTT_POOL_CONNECTION_MISSING' })
+    if (!_.map(opts.connections, 'name').includes(b.connection)) throw error(`Unknown connection for pool '${b.name}'`, { code: 'BAJOMQTT_POOL_CONNECTION_UNKNOWN' })
+    if (!b.topic) throw error('A pool must have topic to send to', { code: 'BAJOMQTT_POOL_TOPIC_MISSING' })
   }
 }
 
 async function init () {
   const { walkBajos, buildConnections } = this.bajo.helper
   await buildConnections('bajoMqtt', connBuilder, ['name'])
-  prepBroadcasts.call(this)
+  prepBroadcastPool.call(this)
   await walkBajos(collectSubscribers, { glob: 'subscriber/*.js' })
 }
 

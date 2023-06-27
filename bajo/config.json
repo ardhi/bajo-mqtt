@@ -1,5 +1,5 @@
 {
   "single": true,
   "connections": [],
-  "dependency": ["bajo-extra"]
+  "dependency": ["bajo-extra", "bajo-emitter"]
 }

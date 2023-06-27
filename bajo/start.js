@@ -1,6 +1,7 @@
 async function start () {
-  const { _, getConfig, emit } = this.bajo.helper
+  const { _, getConfig } = this.bajo.helper
   const { mqtt, events } = this.bajoMqtt.helper
+  const { emit } = this.bajoEmitter.helper
   const config = getConfig('bajoMqtt')
   const instances = []
 
