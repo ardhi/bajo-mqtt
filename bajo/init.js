@@ -26,10 +26,10 @@ function prepBroadcastPool () {
 }
 
 async function init () {
-  const { walkBajos, buildConnections } = this.bajo.helper
+  const { eachPlugins, buildConnections } = this.bajo.helper
   await buildConnections('bajoMqtt', connBuilder, ['name'])
   prepBroadcastPool.call(this)
-  await walkBajos(collectSubscribers, { glob: 'subscriber/*.js' })
+  await eachPlugins(collectSubscribers, { glob: 'subscriber/*.js' })
 }
 
 export default init
