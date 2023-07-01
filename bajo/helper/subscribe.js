@@ -1,5 +1,6 @@
-export default function (topic, handler, conn = 'default', now, publish) {
-  const { _, log } = this.bajo.helper
+async function subscribe (topic, handler, conn = 'default', now, publish) {
+  const { getPkg, log } = this.bajo.helper
+  const _ = await getPkg('lodash')
   let opts = _.cloneDeep(topic)
   if (_.isString(topic)) opts = { topic, handler, connection: conn, bindNow: now, publish }
   this.bajoMqtt.subscribers = this.bajoMqtt.subscribers || []
@@ -11,9 +12,11 @@ export default function (topic, handler, conn = 'default', now, publish) {
     if (now) {
       const instance = _.find(this.bajoMqtt.instances, { name: c.name })
       if (instance) {
-        instance.client.subscribe(o)
+        await instance.client.subscribe(o)
         log.info(`Subscribed to '%s:%s'`, conn.name, o.topic)
       }
     }
   }
 }
+
+export default subscribe

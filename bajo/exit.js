@@ -1,6 +1,7 @@
 export default function () {
   const { _ } = this.bajo.helper
   const { async } = this.bajoExtra.helper
+  if (!this.bajoMqtt.inistances) return Promise.resolve()
   if (this.bajoMqtt.instances.length === 0) return Promise.resolve()
   return new Promise((resolve, reject) => {
     async.each(this.bajoMqtt.instances, (instance, callback) => {

@@ -1,7 +1,8 @@
 import collectSubscribers from '../lib/collect-subscribers.js'
 
 async function connBuilder (c, config) {
-  const { _, error, generateId } = this.bajo.helper
+  const { getPkg, error, generateId } = this.bajo.helper
+  const _ = await getPkg('lodash')
   if (_.isString(c)) c = { url: c }
   if (!_.has(c, 'url')) throw error('Connection must have url', { code: 'BAJOMQTT_CONNECTION_MISSING_MISSING' })
   if (!_.has(c, 'name')) {
@@ -12,8 +13,9 @@ async function connBuilder (c, config) {
   if (!c.options.clientId) c.options.clientId = generateId()
 }
 
-function prepBroadcastPool () {
-  const { _, getConfig, error } = this.bajo.helper
+async function prepBroadcastPool () {
+  const { getPkg, getConfig, error } = this.bajo.helper
+  const _ = await getPkg('lodash')
   const opts = getConfig('bajoMqtt')
   let bcs = opts.broadcastPools || []
   if (_.isPlainObject(bcs)) bcs = [bcs]
@@ -28,7 +30,7 @@ function prepBroadcastPool () {
 async function init () {
   const { eachPlugins, buildConnections } = this.bajo.helper
   await buildConnections('bajoMqtt', connBuilder, ['name'])
-  prepBroadcastPool.call(this)
+  await prepBroadcastPool.call(this)
   await eachPlugins(collectSubscribers, { glob: 'subscriber/*.js' })
 }
 
