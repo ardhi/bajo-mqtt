@@ -1,4 +1,4 @@
 {
   "connections": [],
-  "dependency": ["bajo-extra", "bajo-emitter"]
+  "dependencies": ["bajo-extra", "bajo-emitter"]
 }
