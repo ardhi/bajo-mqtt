@@ -1,6 +1,6 @@
 async function subscribe (topic, handler, conn = 'default', now, publish) {
-  const { importPackage, log } = this.bajo.helper
-  const _ = await importPackage('lodash')
+  const { importPkg, log } = this.bajo.helper
+  const _ = await importPkg('lodash')
   let opts = _.cloneDeep(topic)
   if (_.isString(topic)) opts = { topic, handler, connection: conn, bindNow: now, publish }
   this.bajoMqtt.subscribers = this.bajoMqtt.subscribers || []
