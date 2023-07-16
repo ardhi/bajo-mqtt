@@ -1,8 +1,9 @@
 export default {
-  handler: function (conn) {
-    const { _, log } = this.bajo.helper
+  handler: async function (conn) {
+    const { importPkg, log } = this.bajo.helper
+    const { find } = await importPkg('lodash-es::bajo')
     log.info(`Connected as '%s'`, conn.name)
-    const instance = _.find(this.bajoMqtt.instances, { name: conn.name })
+    const instance = find(this.bajoMqtt.instances, { name: conn.name })
     if (!instance) return
     for (const s of this.bajoMqtt.subscribers) {
       if (s.connection !== conn.name) continue
