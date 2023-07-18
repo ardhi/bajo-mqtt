@@ -1,7 +1,7 @@
 import mqtt from 'mqtt'
 
 async function start () {
-  const { _, getConfig } = this.bajo.helper
+  const { getConfig } = this.bajo.helper
   const { events } = this.bajoMqtt.helper
   const { emit } = this.bajoEmitter.helper
   const config = getConfig('bajoMqtt')

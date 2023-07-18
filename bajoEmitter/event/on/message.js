@@ -1,7 +1,7 @@
-const message = {
+const onMessage = {
   handler: async function (conn, topic, ...args) {
     const { importPkg } = this.bajo.helper
-    const { filter, isEmpty, isString } = await importPkg('lodash-es::bajo')
+    const { filter, isEmpty, isString } = await importPkg('lodash-es')
     const subs = filter(this.bajoMqtt.subscribers, s => s.connection === conn.name && s.topic === topic)
     if (subs.length === 0) return
     for (const s of subs) {
@@ -9,7 +9,7 @@ const message = {
       const result = await s.handler.call(this, ...args)
       if (isEmpty(result) || !s.publish) return
       if (isString(s.publish)) s.publish = [{ topic: s.publish, connection: conn.name }]
-      for (const p of publish) {
+      for (const p of s.publish) {
         try {
           this.bajoMqtt.helper.publish(p.topic, result, p.connection)
         } catch (err) {}
@@ -19,4 +19,4 @@ const message = {
   level: 1
 }
 
-export default message
+export default onMessage

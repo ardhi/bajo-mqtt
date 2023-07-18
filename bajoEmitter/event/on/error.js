@@ -1,7 +1,9 @@
-export default {
+const onError = {
   handler: function (conn, error) {
     const { log } = this.bajo.helper
-    log.error(`'%s' error: %s`, conn.name, error.message)
+    log.error('\'%s\' error: %s', conn.name, error.message)
   },
   level: 1
 }
+
+export default onError

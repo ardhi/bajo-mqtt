@@ -1,7 +1,9 @@
-export default {
+const onOffline = {
   handler: function (conn) {
     const { log } = this.bajo.helper
-    log.debug(`'%s' is offline`, conn.name)
+    log.debug('\'%s\' is offline', conn.name)
   },
   level: 1000
 }
+
+export default onOffline
