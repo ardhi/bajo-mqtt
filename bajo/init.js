@@ -1,16 +1,16 @@
 import collectSubscribers from '../lib/collect-subscribers.js'
 
-async function connBuilder (c, config) {
+async function handler ({ item, options }) {
   const { importPkg, error, generateId } = this.bajo.helper
   const { isString, has, find } = await importPkg('lodash-es')
-  if (isString(c)) c = { url: c }
-  if (!has(c, 'url')) throw error('Connection must have url', { code: 'BAJOMQTT_CONNECTION_MISSING_MISSING' })
-  if (!has(c, 'name')) {
-    if (find(config.connections, { name: 'default' })) throw error('Connection \'default\' already exists', { code: 'BAJOMQTT_CONNECTION_ALREADY_EXISTS' })
-    else c.name = 'default'
+  if (isString(item)) item = { url: item }
+  if (!has(item, 'url')) throw error('Connection must have url', { code: 'BAJOMQTT_CONNECTION_MISSING_MISSING' })
+  if (!has(item, 'name')) {
+    if (find(options.connections, { name: 'default' })) throw error('Connection \'default\' already exists', { code: 'BAJOMQTT_CONNECTION_ALREADY_EXISTS' })
+    else item.name = 'default'
   }
-  c.options = c.options || {}
-  if (!c.options.clientId) c.options.clientId = generateId()
+  item.options = item.options || {}
+  if (!item.options.clientId) item.options.clientId = generateId()
 }
 
 async function prepBroadcastPool () {
@@ -28,8 +28,8 @@ async function prepBroadcastPool () {
 }
 
 async function init () {
-  const { eachPlugins, buildConnections } = this.bajo.helper
-  await buildConnections('bajoMqtt', connBuilder, ['name'])
+  const { eachPlugins, buildCollections } = this.bajo.helper
+  await buildCollections({ handler, dupChecks: ['name'] })
   await prepBroadcastPool.call(this)
   await eachPlugins(collectSubscribers, { glob: 'subscriber/*.js' })
 }
