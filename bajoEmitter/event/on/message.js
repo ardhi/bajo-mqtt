@@ -1,5 +1,5 @@
 const onMessage = {
-  handler: async function (conn, topic, ...args) {
+  handler: async function bajoMqttOnMessage (conn, topic, ...args) {
     const { importPkg } = this.bajo.helper
     const { filter, isEmpty, isString } = await importPkg('lodash-es')
     const subs = filter(this.bajoMqtt.subscribers, s => s.connection === conn.name && s.topic === topic)

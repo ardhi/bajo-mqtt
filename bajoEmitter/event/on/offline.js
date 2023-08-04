@@ -1,5 +1,5 @@
 const onOffline = {
-  handler: function (conn) {
+  handler: function bajoMqttOnOffline (conn) {
     const { log } = this.bajo.helper
     log.debug('\'%s\' is offline', conn.name)
   },

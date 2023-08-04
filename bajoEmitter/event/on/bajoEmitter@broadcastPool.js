@@ -1,7 +1,7 @@
 const broadcastPool = {
   level: 1,
-  handler: async function (msg, meta) {
-    const { _, getConfig } = this.bajo.helper
+  handler: async function bajoEmitterOnBroadcastPool (msg, meta) {
+    const { getConfig } = this.bajo.helper
     const { publish } = this.bajoMqtt.helper
     const cfg = getConfig('bajoMqtt')
     if (cfg.broadcastPools.length === 0) return

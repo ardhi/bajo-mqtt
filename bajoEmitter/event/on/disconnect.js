@@ -1,7 +1,7 @@
 const onDisconnect = {
-  handler: function (conn) {
+  handler: function bajoMqttOnDisconnect (conn) {
     const { log } = this.bajo.helper
-    log.info('\'%s\' is disconnected', conn.name)
+    log.debug('\'%s\' is disconnected', conn.name)
   },
   level: 1000
 }

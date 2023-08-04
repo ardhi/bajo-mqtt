@@ -1,7 +1,7 @@
 const onClose = {
-  handler: function (conn) {
+  handler: function bajoMqttOnClose (conn) {
     const { log } = this.bajo.helper
-    log.info('\'%s\' is closed', conn.name)
+    log.debug('\'%s\' is closed', conn.name)
   },
   level: 1000
 }

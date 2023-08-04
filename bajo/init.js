@@ -31,6 +31,7 @@ async function init () {
   const { eachPlugins, buildCollections } = this.bajo.helper
   await buildCollections({ handler, dupChecks: ['name'] })
   await prepBroadcastPool.call(this)
+  this.bajoMqtt.subscribers = this.bajoMqtt.subscribers || []
   await eachPlugins(collectSubscribers, { glob: 'subscriber/*.js' })
 }
 

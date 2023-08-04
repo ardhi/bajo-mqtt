@@ -3,7 +3,6 @@ async function subscribe (topic, handler, conn = 'default', now, publish) {
   const { cloneDeep, isString, pick, find } = await importPkg('lodash-es')
   let opts = cloneDeep(topic)
   if (isString(topic)) opts = { topic, handler, connection: conn, bindNow: now, publish }
-  this.bajoMqtt.subscribers = this.bajoMqtt.subscribers || []
   if (isString(opts.connection)) opts.connection = opts.connection.split(',')
   for (const c of opts.connection) {
     const o = pick(opts, ['topic', 'handler', 'publish'])

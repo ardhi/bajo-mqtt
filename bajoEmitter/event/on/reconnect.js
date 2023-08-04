@@ -1,5 +1,5 @@
 const onReconnect = {
-  handler: function (conn) {
+  handler: function bajoMqttOnReconnect (conn) {
     const { log } = this.bajo.helper
     log.debug('\'%s\' is trying to reconnect', conn.name)
   },

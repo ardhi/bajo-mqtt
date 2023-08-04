@@ -1,5 +1,5 @@
 const onEnd = {
-  handler: function (conn) {
+  handler: function bajoMqttOnEnd (conn) {
     const { log } = this.bajo.helper
     log.debug('\'%s\' is ended', conn.name)
   },
