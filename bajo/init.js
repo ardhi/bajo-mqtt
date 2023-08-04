@@ -1,6 +1,4 @@
-import collectSubscribers from '../lib/collect-subscribers.js'
-
-async function handler ({ item, options }) {
+async function connHandler ({ item, options }) {
   const { importPkg, error, generateId } = this.bajo.helper
   const { isString, has, find } = await importPkg('lodash-es')
   if (isString(item)) item = { url: item }
@@ -11,6 +9,14 @@ async function handler ({ item, options }) {
   }
   item.options = item.options || {}
   if (!item.options.clientId) item.options.clientId = generateId()
+}
+
+async function subsHandler ({ item }) {
+  const { importPkg, error } = this.bajo.helper
+  const { has, find } = await importPkg('lodash-es')
+  if (!has(item, 'connection')) item.connection = 'default'
+  if (!find(this.bajoMqtt.connections, { name: item.connection })) throw error('Connection \'%s\' not found', item.connection)
+  if (!has(item, 'topic')) throw error('Subscriber must have connection attached')
 }
 
 async function prepBroadcastPool () {
@@ -28,11 +34,10 @@ async function prepBroadcastPool () {
 }
 
 async function init () {
-  const { eachPlugins, buildCollections } = this.bajo.helper
-  await buildCollections({ handler, dupChecks: ['name'] })
+  const { buildCollections } = this.bajo.helper
+  this.bajoMqtt.connections = await buildCollections({ handler: connHandler, dupChecks: ['name'] })
+  this.bajoMqtt.subscribers = await buildCollections({ handler: subsHandler, container: 'subscribers', dupChecks: ['connection', 'topic'] })
   await prepBroadcastPool.call(this)
-  this.bajoMqtt.subscribers = this.bajoMqtt.subscribers || []
-  await eachPlugins(collectSubscribers, { glob: 'subscriber/*.js' })
 }
 
 export default init

@@ -7,7 +7,10 @@ function exit () {
       .then(async => {
         async.each(this.bajoMqtt.instances, (instance, callback) => {
           async.each(this.bajoMqtt.subscribers, (sub, cb) => {
-            if (sub.connection === instance.name) instance.client.unsubscribe(sub.topic, cb)
+            if (sub.connection === instance.name) {
+              instance.client.unsubscribe(sub.topic)
+              cb()
+            }
           }, (e) => {
             instance.client.end()
             callback()
