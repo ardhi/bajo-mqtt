@@ -1,4 +1,4 @@
-async function send (msg, { from, to } = {}) {
+async function send ({ msg, from, to } = {}) {
   const { importPkg, error } = this.bajo.helper
   const { find } = await importPkg('lodash-es')
   const { addressSplit } = this.bajoEmitter.helper
