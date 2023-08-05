@@ -1,4 +1,6 @@
 {
   "connections": [],
+  "subscribers": [],
+  "broadcastPools": [],
   "dependencies": ["bajo-extra", "bajo-emitter"]
 }
