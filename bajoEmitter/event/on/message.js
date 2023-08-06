@@ -13,7 +13,7 @@ const onMessage = {
         broadcast({
           msg,
           to: b,
-          from: `${topic}@${conn.name}.bajoMqtt`
+          from: `${topic}:${conn.name}@bajoMqtt`
         })
       }
     }
