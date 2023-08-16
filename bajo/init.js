@@ -7,7 +7,7 @@ async function connHandler ({ item, options }) {
     if (find(options.connections, { name: 'default' })) throw error('Connection \'default\' already exists', { code: 'BAJOMQTT_CONNECTION_ALREADY_EXISTS' })
     else item.name = 'default'
   }
-  item.options = item.options || {}
+  item.options = item.options ?? {}
   if (!item.options.clientId) item.options.clientId = generateId()
 }
 

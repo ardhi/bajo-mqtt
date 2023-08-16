@@ -5,7 +5,7 @@ const onMessage = {
     let [conn, topic, msg] = args
     for (const sub of this.bajoMqtt.subscribers) {
       if (!(sub.connection === conn.name && sub.topic === topic)) continue
-      for (const b of sub.broadcastPool || []) {
+      for (const b of sub.broadcastPool ?? []) {
         msg = msg.toString()
         try {
           msg = JSON.parse(msg)
