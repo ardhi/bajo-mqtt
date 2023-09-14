@@ -2,9 +2,9 @@ async function connHandler ({ item, options }) {
   const { importPkg, error, generateId } = this.bajo.helper
   const { isString, has, find } = await importPkg('lodash-es')
   if (isString(item)) item = { url: item }
-  if (!has(item, 'url')) throw error('Connection must have url', { code: 'BAJOMQTT_CONNECTION_MISSING_MISSING' })
+  if (!has(item, 'url')) throw error('Connection must have url')
   if (!has(item, 'name')) {
-    if (find(options.connections, { name: 'default' })) throw error('Connection \'default\' already exists', { code: 'BAJOMQTT_CONNECTION_ALREADY_EXISTS' })
+    if (find(options.connections, { name: 'default' })) throw error('Connection \'default\' already exists')
     else item.name = 'default'
   }
   item.options = item.options ?? {}
