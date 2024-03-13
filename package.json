@@ -1,6 +1,6 @@
 {
   "name": "bajo-mqtt",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "MQTT binding for Bajo Framework",
   "main": "index.js",
   "scripts": {

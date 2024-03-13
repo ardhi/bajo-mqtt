@@ -1,21 +1,17 @@
 import mqtt from 'mqtt'
 
 async function start () {
-  const { getConfig } = this.bajo.helper
   const { events } = this.bajoMqtt.helper
   const { emit } = this.bajoEmitter.helper
-  const config = getConfig('bajoMqtt')
-  const instances = []
-  for (const c of config.connections ?? []) {
+  for (const c of this.bajoMqtt.connections ?? []) {
     const client = mqtt.connect(c.url, c.options)
     for (const evt of events) {
       client.on(evt, async (...args) => {
         emit(`bajoMqtt.${evt}`, c, ...args)
       })
     }
-    instances.push({ name: c.name, client })
+    c.instance = client
   }
-  this.bajoMqtt.instances = instances
 }
 
 export default start
