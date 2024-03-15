@@ -1,12 +1,8 @@
 async function connHandler ({ item, options }) {
   const { importPkg, error, generateId } = this.bajo.helper
-  const { isString, has, find } = await importPkg('lodash-es')
+  const { isString, has } = await importPkg('lodash-es')
   if (isString(item)) item = { url: item }
   if (!has(item, 'url')) throw error('Connection must have url')
-  if (!has(item, 'name')) {
-    if (find(options.connections, { name: 'default' })) throw error('Connection \'default\' already exists')
-    else item.name = 'default'
-  }
   item.options = item.options ?? {}
   if (!item.options.clientId) item.options.clientId = generateId()
 }
@@ -21,8 +17,8 @@ async function subsHandler ({ item }) {
 
 async function init () {
   const { buildCollections } = this.bajo.helper
-  this.bajoMqtt.connections = await buildCollections({ handler: connHandler, dupChecks: ['name'] })
-  this.bajoMqtt.subscribers = await buildCollections({ handler: subsHandler, useBroadcastPool: true, container: 'subscribers', dupChecks: ['connection', 'topic'] })
+  this.bajoMqtt.connections = await buildCollections({ handler: connHandler })
+  this.bajoMqtt.subscribers = await buildCollections({ handler: subsHandler, container: 'subscribers', dupChecks: ['connection', 'topic'] })
 }
 
 export default init

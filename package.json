@@ -1,6 +1,6 @@
 {
   "name": "bajo-mqtt",
-  "version": "0.2.2",
+  "version": "0.2.4",
   "description": "MQTT binding for Bajo Framework",
   "main": "index.js",
   "scripts": {
@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/ardhi/bajo-mqtt#readme",
   "dependencies": {
-    "mqtt": "^4.3.7"
+    "mqtt": "^5.4.0"
   }
 }

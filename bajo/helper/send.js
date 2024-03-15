@@ -7,7 +7,8 @@ async function send ({ msg, from, to } = {}) {
   if (transport !== 'bajoMqtt') return
   const c = find(this.bajoMqtt.connections, { name: connection })
   if (!c) throw error('No such connection \'%s\'', connection)
-  if (!c.instance.connected) throw error('Connection \'%s\' is dead', connection)
+  if (!c.instance) return
+  if (!c.instance.connected) return
   await publish(destination, msg, connection)
 }
 
