@@ -18,7 +18,7 @@ async function subsHandler ({ item }) {
 async function init () {
   const { buildCollections } = this.bajo.helper
   this.bajoMqtt.connections = await buildCollections({ handler: connHandler })
-  this.bajoMqtt.subscribers = await buildCollections({ handler: subsHandler, container: 'subscribers', dupChecks: ['connection', 'topic'] })
+  this.bajoMqtt.subscribers = await buildCollections({ handler: subsHandler, container: 'subscribers' })
 }
 
 export default init
