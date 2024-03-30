@@ -8,11 +8,14 @@ async function connHandler ({ item, options }) {
 }
 
 async function subsHandler ({ item }) {
-  const { importPkg, error } = this.bajo.helper
+  const { importPkg, error, log } = this.bajo.helper
   const { has, find } = await importPkg('lodash-es')
   if (!has(item, 'connection')) item.connection = 'default'
-  if (!find(this.bajoMqtt.connections, { name: item.connection })) throw error('Connection \'%s\' not found', item.connection)
   if (!has(item, 'topic')) throw error('Subscriber must have connection attached')
+  if (!find(this.bajoMqtt.connections, { name: item.connection })) {
+    log.warn('Connection \'%s\' not found, skipped', item.connection)
+    return false
+  }
 }
 
 async function init () {
