@@ -1,6 +1,6 @@
 async function connHandler ({ item, options }) {
-  const { importPkg, error, generateId } = this.bajo.helper
-  const { isString, has } = await importPkg('lodash-es')
+  const { error, generateId } = this.bajo.helper
+  const { isString, has } = this.bajo.helper._
   if (isString(item)) item = { url: item }
   if (!has(item, 'url')) throw error('Connection must have url')
   item.options = item.options ?? {}
@@ -8,8 +8,8 @@ async function connHandler ({ item, options }) {
 }
 
 async function subsHandler ({ item }) {
-  const { importPkg, error, log } = this.bajo.helper
-  const { has, find } = await importPkg('lodash-es')
+  const { error, log } = this.bajo.helper
+  const { has, find } = this.bajo.helper._
   if (!has(item, 'connection')) item.connection = 'default'
   if (!has(item, 'topic')) throw error('Subscriber must have connection attached')
   if (!find(this.bajoMqtt.connections, { name: item.connection })) {

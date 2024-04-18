@@ -1,6 +1,6 @@
 async function send ({ msg, from, to } = {}) {
-  const { importPkg, error } = this.bajo.helper
-  const { find } = await importPkg('lodash-es')
+  const { error } = this.bajo.helper
+  const { find } = this.bajo.helper._
   const { addressSplit } = this.bajoEmitter.helper
   const { publish } = this.bajoMqtt.helper
   const { destination, connection, transport } = addressSplit(to)

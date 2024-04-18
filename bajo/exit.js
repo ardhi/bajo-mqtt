@@ -4,7 +4,7 @@ function exit () {
   if (this.bajoMqtt.connections.length === 0) return Promise.resolve()
   return new Promise((resolve, reject) => {
     if (!this.bajoExtra) return resolve()
-    importPkg('bajo-extra:async')
+    importPkg('bajoExtra:async')
       .then(async => {
         async.each(this.bajoMqtt.connections, (c, callback) => {
           async.each(this.bajoMqtt.subscribers, (sub, cb) => {

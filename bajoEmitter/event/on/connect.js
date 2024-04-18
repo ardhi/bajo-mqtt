@@ -1,7 +1,7 @@
 const onConnect = {
-  handler: async function bajoMqttOnConnect (conn) {
-    const { importPkg, log } = this.bajo.helper
-    const { find } = await importPkg('lodash-es')
+  handler: function bajoMqttOnConnect (conn) {
+    const { log } = this.bajo.helper
+    const { find } = this.bajo.helper._
     log.debug('Connected as \'%s\'', conn.name)
     const c = find(this.bajoMqtt.connections, { name: conn.name })
     if (!c) return
