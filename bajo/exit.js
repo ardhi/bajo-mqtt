@@ -7,7 +7,7 @@ function exit () {
     importPkg('bajoExtra:async')
       .then(async => {
         async.each(this.connections, (c, callback) => {
-          async.each(this.subscribers, (sub, cb) => {
+          async.each(this.subscriptions, (sub, cb) => {
             if (sub.connection === c.name) c.instance.unsubscribe(sub.topic)
             cb()
           }, (e) => {
