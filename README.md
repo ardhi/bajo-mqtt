@@ -2,6 +2,27 @@
 
 MQTT binding for [Bajo Framework](https://github.com/ardhi/bajo). Require [Bajo Emitter](https://github.com/ardhi/bajo-emitter) to work correctly.
 
+## Installation
+
+Goto your ```<bajo-app-dir>``` and type:
+
+```bash
+$ npm install bajo-mqtt
+```
+
+Now open your ```<bajo-data-dir>/config/bajo.json``` and insert ```bajo-mqtt``` inside your ```plugins```. Order doesn't matter here, but you should put it behind ```bajo-emitter```:
+
+```json
+{
+  ...
+  "log": {
+    "level": "trace"
+  },
+  "plugins": [..., "bajo-emitter", "bajo-mqtt", ...],
+  ...
+}
+```
+
 ## Configuration
 
 Open/create ```<bajo-data-dir>/config/bajoMqtt.json```:
