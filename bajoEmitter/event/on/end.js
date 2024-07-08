@@ -1,7 +1,6 @@
 const onEnd = {
   handler: function bajoMqttOnEnd (conn) {
-    const { log } = this.bajo.helper
-    log.debug('\'%s\' is ended', conn.name)
+    this.log.trace('Connection \'%s\' is ended', conn.name)
   },
   level: 1000
 }
