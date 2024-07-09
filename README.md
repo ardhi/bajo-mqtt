@@ -10,10 +10,10 @@ MQTT binding for [Bajo Framework](https://github.com/ardhi/bajo). Require [Bajo 
 Goto your ```<bajo-base-dir>``` and type:
 
 ```bash
-$ npm install bajo-config
+$ npm install bajo-mqtt
 ```
 
-Now open your ```<bajo-data-dir>/config/.plugins``` and put ```bajo-config``` in it
+Now open your ```<bajo-data-dir>/config/.plugins``` and put ```bajo-mqtt``` in it
 . Order doesn't matter here, but you should put it below ```bajo-emitter```:
 
 ```
