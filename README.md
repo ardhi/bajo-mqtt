@@ -1,5 +1,7 @@
 # bajo-mqtt
 
+Plugin name: **bajoMqtt**, alias: **mqtt**
+
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/ardhi/bajo-mqtt) ![NPM Version](https://img.shields.io/npm/v/bajo-mqtt)
 
 > <br />**Attention**: I do NOT accept any pull request at the moment, thanks!<br /><br />
