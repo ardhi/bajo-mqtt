@@ -2,6 +2,7 @@
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/ardhi/bajo-mqtt) ![NPM Version](https://img.shields.io/npm/v/bajo-mqtt)
 
+> <br />**Attention**: I do NOT accept any pull request at the moment, thanks!<br /><br />
 
 MQTT binding for [Bajo Framework](https://github.com/ardhi/bajo). Require [Bajo Emitter](https://github.com/ardhi/bajo-emitter) to work correctly.
 
