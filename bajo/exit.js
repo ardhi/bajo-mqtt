@@ -1,5 +1,5 @@
 function exit () {
-  const { importPkg } = this.app.bajo.helper
+  const { importPkg } = this.app.bajo
   if (!this.connections) return Promise.resolve()
   if (this.connections.length === 0) return Promise.resolve()
   return new Promise((resolve, reject) => {

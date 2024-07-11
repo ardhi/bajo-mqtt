@@ -1,6 +1,6 @@
 const onConnect = {
   handler: function bajoMqttOnConnect (conn) {
-    const { find } = this.app.bajo.helper._
+    const { find } = this.app.bajo.lib._
     this.log.debug('Connection \'%s\' is connected', conn.name)
     const c = find(this.connections, { name: conn.name })
     if (!c) return

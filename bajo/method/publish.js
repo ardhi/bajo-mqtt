@@ -1,6 +1,6 @@
 function publish (topic, message, conn = 'default') {
-  const { error } = this.app.bajo.helper
-  const { find } = this.app.bajo.helper._
+  const { error } = this.app.bajo
+  const { find } = this.app.bajo.lib._
   return new Promise((resolve, reject) => {
     const c = find(this.connections, { name: conn })
     if (!c) throw error('No such connection \'%s\'', conn)
