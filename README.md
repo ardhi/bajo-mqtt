@@ -6,7 +6,7 @@ Plugin name: **bajoMqtt**, alias: **mqtt**
 
 > <br />**Attention**: I do NOT accept any pull request at the moment, thanks!<br /><br />
 
-MQTT binding for [Bajo Framework](https://github.com/ardhi/bajo). Require [Bajo Emitter](https://github.com/ardhi/bajo-emitter) to work correctly.
+MQTT binding for [Bajo](https://github.com/ardhi/bajo). If [Bajo Emitter](https://github.com/ardhi/bajo-emitter) is loaded, events & messages are also handled through Bajo Emitter processing system.
 
 ## Installation
 
@@ -66,6 +66,17 @@ Example:
   }]
 }
 ```
+
+## Hook
+
+- ```bajoMqtt:onClose (conn)```
+- ```bajoMqtt:onConnect (conn)```
+- ```bajoMqtt:onDisconnect (conn)```
+- ```bajoMqtt:onEnd (conn)```
+- ```bajoMqtt:onError (conn, error)```
+- ```bajoMqtt:onMessage (conn, topic, message)```
+- ```bajoMqtt:onOffline (conn)```
+- ```bajoMqtt:onReconnect (conn)```
 
 ## License
 
