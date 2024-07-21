@@ -1,5 +1,5 @@
 {
   "connections": [],
   "subscribers": [],
-  "dependencies": ["bajo-emitter"]
+  "dependencies": []
 }
