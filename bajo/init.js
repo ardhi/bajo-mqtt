@@ -16,7 +16,7 @@ async function subsHandler ({ item }) {
 
 async function init () {
   const { buildCollections } = this.app.bajo
-  this.connections = await buildCollections({ ns: this.name, handler: connHandler })
+  this.connections = await buildCollections({ ns: this.name, handler: connHandler, container: 'connections' })
   this.subscriptions = await buildCollections({ ns: this.name, handler: subsHandler, container: 'subscriptions' })
 }
 
