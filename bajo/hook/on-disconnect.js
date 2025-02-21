@@ -1,7 +1,9 @@
+function handler (conn) {
+  this.log.debug('connIs%s%s', conn.name, this.print.write('disconnectedL'))
+}
+
 const onDisconnect = {
-  handler: function bajoMqttOnDisconnect (conn) {
-    this.log.debug('Connection \'%s\' is %s', conn.name, this.print.write('disconnected'))
-  },
+  handler,
   level: 1000
 }
 

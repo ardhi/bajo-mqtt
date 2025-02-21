@@ -1,7 +1,9 @@
+function handler (conn) {
+  this.log.trace('connIs%s%s', conn.name, this.print.write('closedL'))
+}
+
 const onClose = {
-  handler: function bajoMqttOnClose (conn) {
-    this.log.trace('Connection \'%s\' is %s', conn.name, this.print.write('closed'))
-  },
+  handler,
   level: 1000
 }
 

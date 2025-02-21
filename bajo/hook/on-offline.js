@@ -1,7 +1,9 @@
+function handler (conn) {
+  this.log.trace('connIs%s%s', conn.name, this.print.write('offlineL'))
+}
+
 const onOffline = {
-  handler: function bajoMqttOnOffline (conn) {
-    this.log.trace('Connection \'%s\' is %s', conn.name, this.print.write('offline'))
-  },
+  handler,
   level: 1000
 }
 

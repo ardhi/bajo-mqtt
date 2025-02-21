@@ -1,7 +1,9 @@
+function handler (conn, error) {
+  this.log.error('connError%s%s', conn.name, error.message)
+}
+
 const onError = {
-  handler: function bajoMqttOnError (conn, error) {
-    this.log.error('Connection \'%s\' error: %s', conn.name, error.message)
-  },
+  handler,
   level: 1
 }
 
