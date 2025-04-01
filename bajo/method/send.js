@@ -1,5 +1,5 @@
 async function send ({ msg, from, to } = {}) {
-  const { find, isEmpty } = this.app.bajo.lib._
+  const { find, isEmpty } = this.lib._
   const { addressSplit } = this.app.bajoEmitter
   const { subject, connection, plugin } = addressSplit(to)
   if (plugin !== 'bajoMqtt') return

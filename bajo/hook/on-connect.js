@@ -1,5 +1,5 @@
 function handler (conn) {
-  const { find } = this.app.bajo.lib._
+  const { find } = this.lib._
   this.log.debug('connIs%s%s', conn.name, this.print.write('connectedL'))
   const c = find(this.connections, { name: conn.name })
   if (!c) return

@@ -2,7 +2,7 @@ import mqtt from 'mqtt'
 
 async function start () {
   const { runHook } = this.app.bajo
-  const { camelCase } = this.app.bajo.lib._
+  const { camelCase } = this.lib._
 
   for (const c of this.connections ?? []) {
     const client = mqtt.connect(c.url, c.options)

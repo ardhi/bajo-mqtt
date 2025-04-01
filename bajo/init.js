@@ -1,6 +1,6 @@
 async function connHandler ({ item, options }) {
   const { generateId } = this.app.bajo
-  const { isString, has } = this.app.bajo.lib._
+  const { isString, has } = this.lib._
   if (isString(item)) item = { url: item }
   if (!has(item, 'url')) throw this.error('connMustHave%s', 'url')
   item.options = item.options ?? {}
@@ -8,7 +8,7 @@ async function connHandler ({ item, options }) {
 }
 
 async function subsHandler ({ item }) {
-  const { has, find } = this.app.bajo.lib._
+  const { has, find } = this.lib._
   if (!has(item, 'connection')) item.connection = 'default'
   if (!has(item, 'topic')) throw this.error('subscriptionMustHave%s', 'topic')
   if (!find(this.connections, { name: item.connection })) throw this.error('notFound%s%s', this.print.write('Connection'), item.connection)
